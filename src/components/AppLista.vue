@@ -1,5 +1,5 @@
 <template>
-    <div class="listaPrincipal" :style=" lista.featured ? 'background-color:hsl(180, 29%, 50%)': '#fff'">
+    <div class="listaPrincipal">
         <div class="listaCorpo">
             <img id="logo" :src="'../../public/'+lista.logo" alt="img">
            
@@ -12,24 +12,31 @@
             </div>
             <div class="divisao"></div>
             <div class="habilidades">
-                <span class="habilidade" @click="clique('role',lista.role)">{{lista.role}}</span>
-                <span class="habilidade" @click="clique('level',lista.level)">{{lista.level}}</span>
-                <span class="habilidade" @click="clique('tools',t)" v-for="t in lista.tools" :key="t">{{t}}</span>
-                <span class="habilidade" @click="clique('languages',habilidade)"  v-for="habilidade in lista.languages" :key="habilidade">
+                <span :class="alterandoClasse(lista.role) ? 'habilidade-selecionada': 'habilidade'" @click="clique('role',lista.role)">
+                    {{lista.role}}
+                </span>
+                <span :class="alterandoClasse(lista.level) ? 'habilidade-selecionada': 'habilidade'" @click="clique('level',lista.level)">
+                    {{lista.level}}
+                </span>
+                <span :class="alterandoClasse(t) ? 'habilidade-selecionada': 'habilidade'" @click="clique('tools',t)" v-for="t in lista.tools" :key="t">
+                    {{t}}
+                </span>
+                <span :class="alterandoClasse(habilidade) ? 'habilidade-selecionada': 'habilidade'" @click="clique('languages',habilidade)"  v-for="habilidade in lista.languages" :key="habilidade">
                          {{habilidade}}
 
                 </span>
             </div>
         </div>
       
-      
+     
     </div>
 </template>
 
 <script>
 export default {
     props:{
-        lista: Object
+        lista: Object,
+        filtro: Array
     },
     data(){
         return{
@@ -38,9 +45,28 @@ export default {
     },
     methods:{
         clique(propriedade,params){
-            this.$emit('filtro', {propriedade:propriedade, params:params})
-        }
-    }
+             this.$emit('filtro', {propriedade:propriedade, params:params})
+                
+            },
+            alterandoClasse(parametro){
+                var  verificador  = []
+                for(var i =0; i < this.filtro.length; i++){
+                    verificador.push(this.filtro[i].params)
+                }
+          
+                
+                verificador =  verificador.filter((fil)=>{
+                    if(fil == parametro){
+                        
+                        return fil
+                    }
+                })
+                if(verificador.length>0){
+                    return true
+                }
+            }
+    },
+  
 }
 </script>
 
@@ -48,15 +74,16 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap');
     .listaPrincipal{
         background-color: #fff;
-        width: 90%;
-        height: 231px;
+        width: 80%;
+        height: 228px;
         margin-top: 40px;
         border-radius: 5px;
-        box-shadow: 2px 5px 10px #7b8e8e
+        box-shadow: 2px 5px 10px #7b8e8e;
+        transition: 1s;
     }
     .listaCorpo{
         background-color: #fff;
-        width: 98.5%;
+        width: 99%;
         height: 100%;
         float: right;
         border-radius: 5px;
@@ -118,6 +145,7 @@ export default {
         height: auto;
         display: flex;
         justify-content: space-around;
+        justify-content: left;
         flex-wrap: wrap;
     }
     .habilidade{
@@ -135,5 +163,41 @@ export default {
         background-color: hsl(180, 29%, 50%);
         color: #fff;
         cursor: pointer;
+    }
+    .habilidade-selecionada{
+        border: 1px solid hsl(180, 29%, 50%);
+        background-color: hsl(180, 29%, 50%);
+        color: #fff;
+        padding: 5px;
+        margin-left: 6px;
+        font-family: 'League Spartan', sans-serif;
+        margin: 5px;    
+        border-radius: 5px;
+        transition: 0.5s;
+    }
+    @media only screen and (min-width: 1440px) {
+        #logo{
+        width: 90px;
+        height: 90px;
+        margin-top: 10px;
+        margin-left: 25px;
+        }
+        .divisao{
+            display: none;
+        }
+        .listaPrincipal{
+            height: 200px;
+            width: 1154px;
+        }
+        .listaCorpo{
+            display: flex;
+            align-items: center;
+        }
+       .listaInfo{
+        width: 50%;
+       }
+       .habilidade{
+        font-size: 18px;
+       }
     }
 </style>

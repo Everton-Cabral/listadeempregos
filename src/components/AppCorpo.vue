@@ -2,105 +2,80 @@
     <div id="app">
 
         <div class="topbar">
-         <img id="top-bar" src="../../public/images/bg-header-mobile.svg" alt="top-bar">
+         <!-- <img id="top-bar" src="../../public/images/bg-header-mobile.svg" alt="top-bar"> -->
         </div>
-
-      <div class="filtro" v-show="filtro.length > 0">
-        <div class="itensFiltro">
-            <span id="itemFiltro" v-for="(f,i) in filtro" :key="f.params">
-                {{f.params}}
-            <span @click="filtro.splice(i,1)" id="btn-excluir">X</span></span>
-        </div>
-        <span  @click="filtro = []; filtrando()" id="clear">Clear</span>
-      </div>
-     
-      <AppLista v-for="(l,i) in lista" :key="l.id" :lista="lista[i]" 
-      @filtro="filtro.push($event); "></AppLista>
-
+        <transition   name="bounceDown" >
+        <div class="filtro" style="animation-duration: 1s" v-show="filtro.length > 0">
+                <div class="itensFiltro">
+                    <span id="itemFiltro" v-for="(f,i) in filtro" :key="f.params">
+                        {{f.params}}
+                    <span @click="filtro.splice(i,1)" id="btn-excluir">X</span></span>
+                </div>
+                <span  @click="filtro = []" id="clear">Clear</span>
+            </div>
+        </transition>
+        <transition-group  name="fadeDown" id="app">
+            <AppLista :filtro="filtro"  v-for="(l,i) in lista" :key="l.id" :lista="lista[i]" 
+            @filtro="filtro.push($event);"></AppLista>
+        </transition-group>
      
     </div>
 </template>
 
 <script>
-import lista from '@/data.json'
+import listaJson from '@/data.json'
 import AppLista from '../components/AppLista.vue'
 
 export default {
     components:{ AppLista },
 data(){
    return{
-    lista: lista,
+    listaJson: listaJson,
+    lista: listaJson,
     filtro:[],
     listafinal: '',
    
    }
 },
 
-methods:{
-    // filtrando(){
-    //     for(var i=0; i<this.filtro.length;i++){
-    //     this.lista =  this.lista.filter((l)=>{
-           
-    //         var pro = l[this.filtro[i].propriedade]
-    //         var rams = this.filtro[i].params
-            
-           
-    //         if(typeof pro  == 'object'){
-    //           var a = pro.filter((p)=>{
-    //                 if(p == this.filtro[i].params){
-                        
-    //                     return p
-    //                 }
-                    
-    //             })
-    //             pro = a[0]
-    //         }
-          
 
-    //           if(pro == rams){
-    //            // console.log( l[this.filtro[i].propriedade])
-                
-    //             return l
-                    
-    //           } 
-             
-                
-              
-    //         })
-    //     }
-    // }
-},
 watch:{
     filtro:{
         handler(){
-            this.lista =  this.lista.filter((l)=>{
+           this.lista = this.listaJson
+        for(var i=0; i<this.filtro.length;i++){
+        this.lista =  this.lista.filter((l)=>{
            
-           var pro = l[this.filtro[this.filtro.length -1].propriedade]
-           var rams = this.filtro[this.filtro.length -1].params
-           
-          
-           if(typeof pro  == 'object'){
-             var a = pro.filter((p)=>{
-                   if(p == rams){
-                       
-                       return p
-                   }
-                   
-               })
-               pro = a[0]
-           }
-         
-
-             if(pro == rams){
-              // console.log( l[this.filtro[i].propriedade])
-               
-               return l
-                   
-             } 
+            var pro = l[this.filtro[i].propriedade]
+            var rams = this.filtro[i].params
             
-               
+           
+            if(typeof pro  == 'object'){
+              var a = pro.filter((p)=>{
+                    if(p == this.filtro[i].params){
+                        
+                        return p
+                    }
+                    
+                })
+                pro = a[0]
+            }
+          
+
+              if(pro == rams){
+               // console.log( l[this.filtro[i].propriedade])
+                
+                return l
+                    
+              } 
              
-           })
+                
+              
+            })
+        }
+   
+
+
         }
     }
 }
@@ -108,6 +83,9 @@ watch:{
 </script>
 
 <style>
+    body{
+        background-color: hsl(180, 52%, 96%);
+    }
 #app{
     width: 100%;
     height:auto;
@@ -120,17 +98,22 @@ watch:{
 }
 .topbar{
     width: 100%;
-    height: auto;
+    height: 150px;
     background-color:  hsl(180, 29%, 50%);
     padding-bottom: 0px;
     margin-bottom: 40px;
+    background-image: url('@/../public/images/bg-header-mobile.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    
 }
 .topbar #top-bar{
     width: 100%;
     margin-bottom: -4px;
+    height: 100%;
 }
 .filtro{
-    width: 90%;
+    width: 80%;
     height: auto;
     background-color: #fff;
     border-radius: 5px;
@@ -141,6 +124,7 @@ watch:{
     padding-top: 20px;
     padding-bottom: 20px;
     justify-content: space-between;
+    margin-bottom: 40px;
 
 }
 .itensFiltro{
@@ -185,5 +169,13 @@ watch:{
 #clear:hover{
     cursor: pointer;
     text-decoration: underline;
+}
+@media only screen and (min-width: 1440px) {
+    .topbar{
+        background-image: url('@/../public/images/bg-header-desktop.svg')
+    }
+    .filtro{
+        width: 1154px;
+    }
 }
 </style>
