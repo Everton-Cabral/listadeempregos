@@ -1,30 +1,36 @@
 <template>
     <div class="listaPrincipal">
         <div class="listaCorpo">
-            <img id="logo" :src="'../../public/'+lista.logo" alt="img">
+           
+            
+            <img id="logo" :src="'../../public/'+item.logo" alt="img">
            
             <div class="listaInfo">
-                {{lista.company}}
-                 <span id="new" v-show="lista.new">NEW!</span>
-                 <span id="featured" v-show="lista.featured">FEATURED</span>
-                 <p id="position">{{lista.position}}</p>
-                 <p id="detalhes">{{lista.postedAt}} • {{lista.contract}} • {{lista.location}}</p>
+                {{item.company}}
+                 <span id="new" v-show="item.new">NEW!</span>
+                 <span id="featured" v-show="item.featured">FEATURED</span>
+                 <p id="position">{{item.position}}</p>
+                 <p id="detalhes">{{item.postedAt}} • {{item.contract}} • {{item.location}}</p>
             </div>
             <div class="divisao"></div>
             <div class="habilidades">
-                <span :class="alterandoClasse(lista.role) ? 'habilidade-selecionada': 'habilidade'" @click="clique('role',lista.role)">
-                    {{lista.role}}
+                <span class="habilidade" @click="add_listaFiltrada(item.role)">
+                    {{item.role}}
                 </span>
-                <span :class="alterandoClasse(lista.level) ? 'habilidade-selecionada': 'habilidade'" @click="clique('level',lista.level)">
-                    {{lista.level}}
-                </span>
-                <span :class="alterandoClasse(t) ? 'habilidade-selecionada': 'habilidade'" @click="clique('tools',t)" v-for="t in lista.tools" :key="t">
+             
+                <span class="habilidade" @click="add_listaFiltrada(item.level)" >
+                    {{item.level}}
+                 </span>
+                 
+               
+                <span class="habilidade" v-for="t in item.tools" :key="t" @click="add_listaFiltrada(t)">
                     {{t}}
                 </span>
-                <span :class="alterandoClasse(habilidade) ? 'habilidade-selecionada': 'habilidade'" @click="clique('languages',habilidade)"  v-for="habilidade in lista.languages" :key="habilidade">
+               
+                <span class="habilidade"  v-for="habilidade in item.languages" :key="habilidade" @click="add_listaFiltrada(habilidade)">
                          {{habilidade}}
-
                 </span>
+               
             </div>
         </div>
       
@@ -35,8 +41,8 @@
 <script>
 export default {
     props:{
-        lista: Object,
-        filtro: Array
+        item: Object,
+        
     },
     data(){
         return{
@@ -44,28 +50,15 @@ export default {
         }
     },
     methods:{
-        clique(propriedade,params){
-             this.$emit('filtro', {propriedade:propriedade, params:params})
-                
+        add_listaFiltrada(params){
+            
+             this.$store.state.listaFiltrada.push(params)
+   
             },
-            alterandoClasse(parametro){
-                var  verificador  = []
-                for(var i =0; i < this.filtro.length; i++){
-                    verificador.push(this.filtro[i].params)
-                }
-          
-                
-                verificador =  verificador.filter((fil)=>{
-                    if(fil == parametro){
-                        
-                        return fil
-                    }
-                })
-                if(verificador.length>0){
-                    return true
-                }
-            }
+            
+            
     },
+    
   
 }
 </script>

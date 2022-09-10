@@ -5,80 +5,55 @@
          <!-- <img id="top-bar" src="../../public/images/bg-header-mobile.svg" alt="top-bar"> -->
         </div>
         <transition   name="bounceDown" >
-        <div class="filtro" style="animation-duration: 1s" v-show="filtro.length > 0">
+        <div class="filtro" style="animation-duration: 1s" v-show="listaFiltrada.length > 0">
                 <div class="itensFiltro">
-                    <span id="itemFiltro" v-for="(f,i) in filtro" :key="f.params">
-                        {{f.params}}
-                    <span @click="filtro.splice(i,1)" id="btn-excluir">X</span></span>
+                    <span id="itemFiltro" v-for="item in listaFiltrada" :key="item">
+                        {{item}}
+                        <span @click="excluirItem_listaFiltrada(item)" id="btn-excluir">X</span>
+                    </span>
                 </div>
-                <span  @click="filtro = []" id="clear">Clear</span>
-            </div>
+                <span  @click="clear_listaFiltrada()" id="clear">Clear</span>
+         </div>
         </transition>
+
         <transition-group  name="fadeDown" id="app">
-            <AppLista :filtro="filtro"  v-for="(l,i) in lista" :key="l.id" :lista="lista[i]" 
-            @filtro="filtro.push($event);"></AppLista>
+            <AppLista v-for=" item in lista" :key="item.id" :item="item"/>
         </transition-group>
-     
+    
+    
     </div>
 </template>
 
 <script>
-import listaJson from '@/data.json'
+
 import AppLista from '../components/AppLista.vue'
 
 export default {
     components:{ AppLista },
 data(){
    return{
-    listaJson: listaJson,
-    lista: listaJson,
-    filtro:[],
-    listafinal: '',
    
    }
 },
-
-
-watch:{
-    filtro:{
-        handler(){
-           this.lista = this.listaJson
-        for(var i=0; i<this.filtro.length;i++){
-        this.lista =  this.lista.filter((l)=>{
-           
-            var pro = l[this.filtro[i].propriedade]
-            var rams = this.filtro[i].params
-            
-           
-            if(typeof pro  == 'object'){
-              var a = pro.filter((p)=>{
-                    if(p == this.filtro[i].params){
-                        
-                        return p
-                    }
-                    
-                })
-                pro = a[0]
-            }
-          
-
-              if(pro == rams){
-               // console.log( l[this.filtro[i].propriedade])
-                
-                return l
-                    
-              } 
-             
-                
-              
-            })
-        }
-   
-
-
-        }
+computed:{
+    lista(){
+        return this.$store.getters.filtrando
+    },
+    listaFiltrada(){
+        return this.$store.state.listaFiltrada
     }
-}
+},
+methods:{
+    excluirItem_listaFiltrada(item){
+        this.$store.state.listaFiltrada = this.$store.state.listaFiltrada.filter((i)=> item != i)
+        
+        
+    },
+    clear_listaFiltrada(){
+        this.$store.state.listaFiltrada = []
+    }
+},
+
 }
 </script>
 
