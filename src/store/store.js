@@ -12,23 +12,26 @@ export default new Vuex.Store({
     },
     getters:{
         filtrando(state){
-            state.listaFiltrada.filter((f)=>{
+            
+               
+         
+            
+            
+            state.lista = state.listaJson.filter((emprego)=>{
 
-                state.lista = state.lista.filter((l)=>{
-                        if(l.role === f || l.level === f) return l
-                           let tool = l.tools.filter((t)=>{
-                                if(t === f) return t
-                            })
-                        if(tool.length > 0 ) return l
-                            
-                            let habilidade = l.languages.filter((h)=>{
-                                if(h === f) return h 
-                            })
-                        if( habilidade.length > 0) return l
+              
+             let itens = state.listaFiltrada.every((item_lista)=>{
+                     if(item_lista === emprego.role || item_lista === emprego.level
+                         || emprego.languages.includes(item_lista) || emprego.tools.includes(item_lista) ) return true
+                   
                 })
+
+                if(itens) return emprego
             })
-            if(state.listaFiltrada.length < 1) return state.listaJson
-            return state.lista
+            //console.log(lista1)
+        
+             return state.lista
+
         }
     }
 })
