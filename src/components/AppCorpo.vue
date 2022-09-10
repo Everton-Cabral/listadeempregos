@@ -2,7 +2,7 @@
     <div id="app">
 
         <div class="topbar">
-         <!-- <img id="top-bar" src="../../public/images/bg-header-mobile.svg" alt="top-bar"> -->
+    
         </div>
         <transition   name="bounceDown" >
         <div class="filtro" style="animation-duration: 1s" v-show="listaFiltrada.length > 0">
@@ -12,7 +12,7 @@
                         <span @click="excluirItem_listaFiltrada(item)" id="btn-excluir">X</span>
                     </span>
                 </div>
-                <span  @click="clear_listaFiltrada()" id="clear">Clear</span>
+                <span @click="clear_listaFiltrada()" id="clear">Clear</span>
          </div>
         </transition>
 
@@ -30,11 +30,7 @@ import AppLista from '../components/AppLista.vue'
 
 export default {
     components:{ AppLista },
-data(){
-   return{
-   
-   }
-},
+
 computed:{
     lista(){
         return this.$store.getters.filtrando
@@ -45,10 +41,9 @@ computed:{
 },
 methods:{
     excluirItem_listaFiltrada(item){
-        this.$store.state.listaFiltrada = this.$store.state.listaFiltrada.filter((i)=> item != i)
-        
-        
+        this.$store.state.listaFiltrada = this.$store.state.listaFiltrada.filter((i)=> item != i)      
     },
+    
     clear_listaFiltrada(){
         this.$store.state.listaFiltrada = []
     }

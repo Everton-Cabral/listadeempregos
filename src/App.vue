@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppCorpo></AppCorpo>
+    <AppCorpo/>
   </div>
 </template>
 
@@ -17,9 +17,6 @@ export default {
 <style>
 *{
   margin: 0px;
-  padding: 0px;
-  
+  padding: 0px; 
 }
-
-
 </style>

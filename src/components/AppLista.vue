@@ -42,24 +42,14 @@
 export default {
     props:{
         item: Object,
-        
     },
-    data(){
-        return{
-            
-        }
-    },
+
     methods:{
         add_listaFiltrada(params){
-            
-             this.$store.state.listaFiltrada.push(params)
-   
-            },
-            
-            
+            this.$store.state.listaFiltrada.push(params)
+        },                      
     },
     
-  
 }
 </script>
 
