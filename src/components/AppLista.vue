@@ -14,20 +14,20 @@
             </div>
             <div class="divisao"></div>
             <div class="habilidades">
-                <span class="habilidade" @click="add_listaFiltrada(item.role)">
+                <span :class= "classeDinamica(item.role)" @click="add_listaFiltrada(item.role)">
                     {{item.role}}
                 </span>
              
-                <span class="habilidade" @click="add_listaFiltrada(item.level)" >
+                <span :class="classeDinamica(item.level)" @click="add_listaFiltrada(item.level)" >
                     {{item.level}}
                  </span>
                  
                
-                <span class="habilidade" v-for="t in item.tools" :key="t" @click="add_listaFiltrada(t)">
+                <span :class="classeDinamica(t)" v-for="t in item.tools" :key="t" @click="add_listaFiltrada(t)">
                     {{t}}
                 </span>
                
-                <span class="habilidade"  v-for="habilidade in item.languages" :key="habilidade" @click="add_listaFiltrada(habilidade)">
+                <span :class="classeDinamica(habilidade)"  v-for="habilidade in item.languages" :key="habilidade" @click="add_listaFiltrada(habilidade)">
                          {{habilidade}}
                 </span>
                
@@ -46,10 +46,21 @@ export default {
 
     methods:{
         add_listaFiltrada(params){
-            this.$store.state.listaFiltrada.push(params)
-        },                      
+            let itensClicados =  this.$store.state.listaFiltrada
+            itensClicados.push(params)
+            this.$store.state.listaFiltrada = [...new Set(itensClicados)]
+        }, 
+        classeDinamica(params){
+           return this.$store.state.listaFiltrada.includes(params) ? 'habilidade-selecionada' : 'habilidade'
+        }
+                          
     },
-    
+    computed:{
+        classe(){
+         
+            return true
+        }
+    }
 }
 </script>
 
