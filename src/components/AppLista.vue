@@ -1,5 +1,5 @@
 <template>
-    <div class="listaPrincipal">
+    <div class="listaPrincipal" :class="marcacaoLateral">
         <div class="listaCorpo">
            
             
@@ -59,6 +59,13 @@ export default {
         classe(){
          
             return true
+        },
+        marcacaoLateral(){
+            let resultado = ''
+            if(this.item.featured){
+                resultado = 'marcacaoLateral'
+            }
+            return resultado
         }
     }
 }
@@ -74,6 +81,9 @@ export default {
         border-radius: 5px;
         box-shadow: 2px 5px 10px #7b8e8e;
         transition: 1s;
+    }
+    .marcacaoLateral{
+        background-color: hsl(180, 29%, 50%);
     }
     .listaCorpo{
         background-color: #fff;
